@@ -1,0 +1,15 @@
+// SVP.mcpp                                  HDO, 2006-09-13
+// --------
+// The famous "Sentence of Pythagoras" in MiniCpp
+//=====================================|====================
+
+void main() {
+  int a, b, cs;
+  cin >> a;
+  cin >> b;
+  cs = (a * a) + (b * b);
+  cout << cs << endl;
+} // main
+
+// End of SVP.mcpp
+//=====================================|====================

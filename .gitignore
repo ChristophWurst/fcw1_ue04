@@ -1,0 +1,4 @@
+MiniCpp
+*.gv
+*.tab.*
+*.lex.c
