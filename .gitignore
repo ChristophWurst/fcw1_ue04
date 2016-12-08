@@ -2,3 +2,4 @@ MiniCpp
 *.gv
 *.tab.*
 *.lex.c
+*.output
