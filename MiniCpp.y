@@ -50,6 +50,8 @@
 	int i;
 }
 
+%type<string> FuncHead
+
 %%
 
 /* 1. grammatik kann kopiert werden */
@@ -94,10 +96,10 @@ FuncDecl:
 	FuncHead ';'
 	;
 FuncDef:
-	FuncHead Block
+	FuncHead Block { printf("%s\n", $1); }
 	;
 FuncHead:
-	Type OptPtr IDENT '(' FormParList ')' { printf("%s\n", $3);  }
+	Type OptPtr IDENT '(' FormParList ')' { $$ = $3; }
 	;
 FormParList:
 	/* EPS */
