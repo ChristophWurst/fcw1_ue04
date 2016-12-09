@@ -19,7 +19,7 @@
 [ \t\n]+   { ; }          /*ignore white space: blanks and tabs       */
 "/""/"[^\n]*	{ ; }	/* skip line comments */
 
-[0-9]+   { yylval = atoi(yytext); return NUMBER; }
+[0-9]+   { yylval.i = atoi(yytext); return NUMBER; }
 
 const	{ return CONST; }
 false	{ return FALSE; }
@@ -40,7 +40,7 @@ delete	{ return DELETE; }
 new		{ return NEW; }
 return	{ return RETURN; }
 
-[a-zA-Z][_a-zA-Z0-9]* { return IDENT; }
+[a-zA-Z][_a-zA-Z0-9]* { yylval.string = strdup(yytext); return IDENT; }
 L?\"(\\.|[^\\"])*\"	{return STRING; }
 "<<"		{ return LEFTSHIFT; }
 ">>"		{ return RIGHTSHIFT; }
@@ -49,9 +49,9 @@ L?\"(\\.|[^\\"])*\"	{return STRING; }
 "=="		{ return CMPEQ; }
 "!="		{ return CMPNEQ; }
 "<="		{ return CMPLE; }
-">="			{ return CMPGE; }
+">="		{ return CMPGE; }
 
-.        { return yytext[0]; } /*return all other chars 
+.			{ return yytext[0]; } /*return all other chars 
                                  as tokens to parser: '+', ...      */
 
 %%

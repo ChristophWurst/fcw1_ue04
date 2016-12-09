@@ -16,10 +16,10 @@
 %}
 
 %token CONST
-%token IDENT
+%token <string> IDENT
 %token FALSE
 %token TRUE
-%token NUMBER
+%token <i> NUMBER
 %token VOID
 %token BOOL
 %token INT
@@ -44,6 +44,11 @@
 %token CMPNEQ
 %token CMPLE
 %token CMPGE
+
+%union{
+	char *string;
+	int i;
+}
 
 %%
 
@@ -92,7 +97,7 @@ FuncDef:
 	FuncHead Block
 	;
 FuncHead:
-	Type OptPtr IDENT '(' FormParList ')'
+	Type OptPtr IDENT '(' FormParList ')' { printf("%s\n", $3);  }
 	;
 FormParList:
 	/* EPS */
