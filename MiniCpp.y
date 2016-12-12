@@ -5,6 +5,7 @@
 
 %{
 
+  #include <stdlib.h>
   #include <stdio.h>
 
   extern int yylineno;
@@ -47,6 +48,9 @@
 %token CMPLE
 %token CMPGE
 
+%nonassoc NO_ELSE
+%nonassoc ELSE
+
 %union{
 	char *string;
 	int i;
@@ -56,12 +60,8 @@
 
 %%
 
-/* 1. grammatik kann kopiert werden */
-/* 2. schreibweise fixen (wiederholugen…) */
-/* 3. konflikte lösen */
-
 MiniCpp:
-	{ file = fopen("a.gv", "w"); fprintf(file, "digraph G {\n"); }
+	{ file = fopen("a.gv", "w"); if (!file) { printf("could not open file\n"); exit(1); } fprintf(file, "digraph G {\n"); }
 	DeclDefList
 	{ fprintf(file, "}\n"); fclose(file); }
 	;
@@ -100,8 +100,8 @@ FuncDecl:
 	FuncHead ';'
 	;
 FuncDef:
-	FuncHead { func = $1; /*printf("start %s\n", $1);*/ }
-	Block { /*printf("end %s\n", $1);*/ }
+	FuncHead { func = $1; }
+	Block
 	;
 FuncHead:
 	Type OptPtr IDENT '(' FormParList ')' { $$ = $3; }
@@ -162,7 +162,7 @@ AssignStat:
 	| IDENT '=' Expr ';'
 	;
 CallStat:
-	IDENT { /*printf("calling %s in %s\n", $1, func);*/ fprintf(file, "    %s -> %s\n", func, $1); }
+	IDENT { fprintf(file, "    %s -> %s\n", func, $1); }
 	'(' ActParList ')' ';'
 	;
 ActParList:
@@ -177,7 +177,7 @@ IfStat:
 	IF '(' Expr ')' Stat OptElse
 	;
 OptElse:
-	/* EPS */
+	%prec NO_ELSE
 	| ELSE Stat
 	;
 WhileStat:
